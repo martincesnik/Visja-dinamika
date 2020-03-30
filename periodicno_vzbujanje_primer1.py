@@ -34,10 +34,10 @@ def get_modal_params(m,d,k):
 
 def get_four_coeffs(F_0, n_max, compare_exact=True, t=None, F_exact=None, w=None):
     
-    a_j=np.zeros(n_max)
-    b_j=np.zeros(n_max)
+    a_j=np.zeros(n_max+1)
+    b_j=np.zeros(n_max+1)
     
-    for j in range(n_max):
+    for j in range(n_max+1):
         
         if j==0: #a_0
             a_j[j] = 0
@@ -46,25 +46,25 @@ def get_four_coeffs(F_0, n_max, compare_exact=True, t=None, F_exact=None, w=None
             a_j[j] = 0
             b_j[j] = 2*F_0/j/np.pi *(1-np.cos(j*np.pi))
             
-    if compare_exact:
-        
-        F_approx = np.ones_like(F_exact) 
-        
-        for j in range(n_max):
-            if j==0:
-                F_approx *= a_j[j]/2 
-            else:
-                F_approx += a_j[j]*np.cos(j*w*t) + b_j[j]*np.sin(j*w*t)
-        
-        plt.plot(t,F_exact)
-        plt.plot(t, F_approx)
-        plt.show()
-                
     return a_j, b_j
+            
 
+def exact_vs_approx(t, F_exact, a_j, b_j, w):
 
-
-
+    F_approx = np.ones_like(F_exact) 
+    
+    for j in range(len(a_j+1)):
+        if j==0:
+            F_approx *= a_j[j]/2 
+        else:
+            F_approx += a_j[j]*np.cos(j*w*t) + b_j[j]*np.sin(j*w*t)
+    
+    plt.plot(t,F_exact)
+    plt.plot(t, F_approx)
+    plt.xlabel('Time [s]')
+    plt.ylabel('Force [N]')
+    plt.show()
+                
 
 if __name__=='__main__':
     
@@ -90,8 +90,10 @@ if __name__=='__main__':
     # obtain modal parameters
     w_0, delta = get_modal_params(m,d,k)
     
-    # get fourier series
-    n_max = 10
-    a_j, b_j= get_four_coeffs(F_0, n_max, True, t_array, F_exact, w)
+    # get fourier series and compare exact and approx
+    n_max = 100
+    a_j, b_j= get_four_coeffs(F_0, n_max)
+    
+    exact_vs_approx(t_array, F_exact, a_j, b_j, w)
     
     # the calculation of response using superposition principle is intentionally not coded yet

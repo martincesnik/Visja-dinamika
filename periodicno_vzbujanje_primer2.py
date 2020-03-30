@@ -31,6 +31,8 @@ def get_F_exact (F_0, t, tau, show = False):
         plt.figure()
         plt.plot(t_array,F)
         plt.grid()
+        plt.xlabel('Time [s]')
+        plt.ylabel('Force [N]')
         plt.show()
         
     return F
@@ -43,7 +45,7 @@ def get_modal_params(m,d,k):
     return w_0, delta
 
 
-def get_four_coeffs(F_0, n_max, compare_exact=True, t=None, F_exact=None, w=None):
+def get_four_coeffs(F_0, n_max):
     
     a_j=np.zeros(n_max)
     b_j=np.zeros(n_max)
@@ -57,23 +59,27 @@ def get_four_coeffs(F_0, n_max, compare_exact=True, t=None, F_exact=None, w=None
             a_j[j] = 3*F_0/(2*np.pi*j)*np.sin(j*np.pi/3)
             b_j[j] = F_0/(2*np.pi*j)*(np.cos(j*np.pi/3)-np.cos(j*np.pi))
             
-    if compare_exact:
-        
-        F_approx = np.ones_like(F_exact) 
-        
-        for j in range(n_max):
-            if j==0:
-                F_approx *= a_j[j]/2 
-            else:
-                F_approx += a_j[j]*np.cos(j*w*t) + b_j[j]*np.sin(j*w*t)
-                
-        plt.figure()
-        plt.plot(t,F_exact)
-        plt.plot(t, F_approx)
-        plt.grid()
-        plt.show()
-                
     return a_j, b_j
+
+
+    
+def exact_vs_approx(t, F_exact, a_j, b_j, w):
+
+    F_approx = np.ones_like(F_exact) 
+    
+    for j in range(len(a_j+1)):
+        if j==0:
+            F_approx *= a_j[j]/2 
+        else:
+            F_approx += a_j[j]*np.cos(j*w*t) + b_j[j]*np.sin(j*w*t)
+    
+    plt.plot(t,F_exact)
+    plt.plot(t, F_approx)
+    plt.xlabel('Time [s]')
+    plt.ylabel('Force [N]')
+    plt.grid()
+    plt.show()
+
 
 
 
@@ -105,7 +111,8 @@ if __name__=='__main__':
     
     # get fourier series
     n_max = 100
-    a_j, b_j= get_four_coeffs(F_0, n_max, True, t_array, F_exact, w)
     
-    # the calculation of response using superposition principle is intentionally not coded yet
+    a_j, b_j= get_four_coeffs(F_0, n_max)
+    
+    exact_vs_approx(t_array, F_exact, a_j, b_j, w)    # the calculation of response using superposition principle is intentionally not coded yet
     
