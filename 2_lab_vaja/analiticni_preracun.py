@@ -115,8 +115,8 @@ K = Matrix([k_1, k_2, k_3])
 
 
 # substitute variables in M and K for values
-M = M.subs([(L, L_inp), (m_s, m_s_inp), (J_1, J_i[0]),
-         (J_2, J_i[1]), (J_3, J_i[2])])
+M = M.subs([(L, L_inp), (m_s, m_s_inp), (J_1, J_i_inp[0]),
+         (J_2, J_i_inp[1]), (J_3, J_i_inp[2])])
     
 K = K.subs([(L, L_inp), (k, k_inp)])
 
@@ -132,7 +132,7 @@ idx = eigvals.argsort()
 w_0 = np.sqrt(eigvals[idx])/2/np.pi
 Phi = eigvects[:,idx]/eigvects[:,idx][0,:]
 
-print('System\' natural frequencies)
+print('System\'s natural frequencies')
 print(w_0)
 print('')
 print(Phi)
