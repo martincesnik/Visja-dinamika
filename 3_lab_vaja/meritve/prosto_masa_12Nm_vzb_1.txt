@@ -1,4 +1,4 @@
-Frekvenca [Hz] - Frekv. prenosna funkcija	Amplituda frekv. prenosne funkcije [m/s^2/N] - Frekv. prenosna funkcija	
+Frekvenca [Hz] - Frekv. prenosna funkcija	Amplituda frekv. prenosne funkcije [dB] - Frekv. prenosna funkcija	
 0	3,29883	
 1	-5,39893	
 2	-7,19175	
